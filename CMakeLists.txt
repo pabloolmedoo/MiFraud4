@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(Fraud3)
+project(MiFraud3)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")

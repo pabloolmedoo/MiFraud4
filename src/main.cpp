@@ -1,33 +1,28 @@
 /*
  * Metodología de la Programación
  * Curso 2025/2026
- */
-
-/**
- * @file main.cpp
- * @author Silvia Acid Carrillo <acid@decsai.ugr.es>
- * @author Andrés Cano Utrera <acu@decsai.ugr.es>
- * @author Luis Castillo Vidal <L.Castillo@decsai.ugr.es>
  *
- * Created on 24 de octubre de 2025, 9:27
+ * main.cpp para Fraud3 preparado para los tests de integración adjuntos.
  */
 
-#include <cerrno>
-#include <climits>
-#include <cstdlib>
-#include <exception>
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <cerrno>
+#include <climits>
+#include <exception>
 
 #include "DataSet.h"
 #include "Clustering.h"
 
 using namespace std;
 
+const int DEFAULT_K = 5;
+const string DEFAULT_OUTPUT_FILE = "tests/output/output.dts";
+
 /**
- * Shows help about the use of this program in the given output stream
- * @param outputStream The output stream where the help will be shown
- * @param message Additional message to show with the help
+ * Shows help about the use of this program in the given output stream.
+ * IMPORTANT: this function is void and has no return statement.
  */
 void showHelp(ostream &outputStream, const string &message)
 {
@@ -41,112 +36,144 @@ void showHelp(ostream &outputStream, const string &message)
     outputStream << "-o <outputFile.dts>: name of the output dataset file "
                  << "(tests/output/output.dts by default)" << endl;
     outputStream << "<inputFile.dts>: name of the input dataset file" << endl;
-    outputStream << endl;
 }
 
+/**
+ * Converts a C-string into an int, checking that the whole string is numeric.
+ */
 bool stringToInt(const char *text, int &value)
 {
-    char *end;
-    long result;
+    bool ok = true;
 
-    errno = 0;
-    result = strtol(text, &end, 10);
-
-    if (errno != 0 || *end != '\0' || result < INT_MIN || result > INT_MAX)
+    if (text == nullptr || text[0] == '\0')
     {
-        return false;
+        ok = false;
+    }
+    else
+    {
+        char *end = nullptr;
+        errno = 0;
+        long result = strtol(text, &end, 10);
+
+        if (errno != 0 || end == text || *end != '\0' || result < INT_MIN || result > INT_MAX)
+        {
+            ok = false;
+        }
+        else
+        {
+            value = static_cast<int>(result);
+        }
     }
 
-    value = static_cast<int>(result);
-    return true;
+    return ok;
+}
+
+/**
+ * Checks whether an argument looks like an option.
+ */
+bool isOption(const char *text)
+{
+    return text != nullptr && text[0] == '-';
 }
 
 int main(int argc, char *argv[])
 {
-    const int DEFAULT_K = 5;
-    const string DEFAULT_OUTPUT_FILE = "tests/output/output.dts";
-
     int k = DEFAULT_K;
-    string inputFileName;
-    string outputFileName = DEFAULT_OUTPUT_FILE;
-    int currentArgument = 1;
+    string outputFile = DEFAULT_OUTPUT_FILE;
+    string inputFile;
 
-    while (currentArgument < argc && argv[currentArgument][0] == '-')
+    int arg = 1;
+    bool validParameters = true;
+    string errorMessage;
+
+    while (validParameters && arg < argc && isOption(argv[arg]))
     {
-        string option = argv[currentArgument];
+        string option = argv[arg];
 
         if (option == "-K")
         {
-            if (currentArgument + 1 >= argc)
+            if (arg + 1 >= argc || isOption(argv[arg + 1]))
             {
-                showHelp(cerr, "Missing value for -K");
-                return 1;
+                validParameters = false;
+                errorMessage = "Number of clusters not provided after -K";
             }
-
-            if (!stringToInt(argv[currentArgument + 1], k))
+            else
             {
-                showHelp(cerr, "Invalid value for -K");
-                return 1;
-            }
+                int readK = DEFAULT_K;
 
-            if (k <= 0)
-            {
-                showHelp(cerr, "K must be greater than 0");
-                return 1;
+                if (!stringToInt(argv[arg + 1], readK) || readK <= 0)
+                {
+                    validParameters = false;
+                    errorMessage = "Invalid number of clusters after -K";
+                }
+                else
+                {
+                    k = readK;
+                    arg += 2;
+                }
             }
-
-            currentArgument += 2;
         }
         else if (option == "-o")
         {
-            if (currentArgument + 1 >= argc)
+            if (arg + 1 >= argc || isOption(argv[arg + 1]))
             {
-                showHelp(cerr, "Missing value for -o");
-                return 1;
+                validParameters = false;
+                errorMessage = "Output file not provided after -o";
             }
-
-            outputFileName = argv[currentArgument + 1];
-            currentArgument += 2;
+            else
+            {
+                outputFile = argv[arg + 1];
+                arg += 2;
+            }
         }
         else
         {
-            showHelp(cerr, "Unknown option " + option);
-            return 1;
+            validParameters = false;
+            errorMessage = "Unknown parameter " + option;
         }
     }
 
-    if (currentArgument >= argc)
+    if (validParameters)
     {
-        showHelp(cerr, "Input file not provided");
-        return 1;
+        if (arg >= argc)
+        {
+            validParameters = false;
+            errorMessage = "Input file not provided";
+        }
+        else
+        {
+            inputFile = argv[arg];
+            arg++;
+        }
     }
 
-    inputFileName = argv[currentArgument];
-    currentArgument++;
-
-    if (currentArgument < argc)
+    if (validParameters && arg < argc)
     {
-        showHelp(cerr, "Too many input files");
+        validParameters = false;
+        errorMessage = "Too many input files";
+    }
+
+    if (!validParameters)
+    {
+        showHelp(cerr, errorMessage);
         return 1;
     }
 
     try
     {
         DataSet inputDataSet;
-        DataSet outputDataSet;
+        inputDataSet.load(inputFile);
+
         Clustering clustering;
-
-        inputDataSet.load(inputFileName);
-
         clustering.set(inputDataSet.getVectorLocation(), k);
         clustering.run();
 
-        outputDataSet = inputDataSet.getReducedDataSet(clustering);
-        outputDataSet.save(outputFileName);
+        DataSet outputDataSet = inputDataSet.getReducedDataSet(clustering);
+        outputDataSet.save(outputFile);
     }
-    catch (const exception &error)
+    catch (const exception &e)
     {
-        cerr << "ERROR: " << error.what() << endl;
+        cerr << "ERROR: " << e.what() << endl;
         return 1;
     }
 

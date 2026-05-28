@@ -8,7 +8,7 @@
  * @author Silvia Acid Carrillo <acid@decsai.ugr.es>
  * @author Andrés Cano Utrera <acu@decsai.ugr.es>
  * @author Luis Castillo Vidal <L.Castillo@decsai.ugr.es>
- * 
+ *
  * Created on 30 de julio de 2025, 9:54
  */
 
@@ -20,7 +20,7 @@
 
 
 /**
- * @brief It builds a VectorInt object (vector of integers) with a 
+ * @brief It builds a VectorInt object (vector of integers) with a
  * size and capacity equal to the provided value (@p size). Each element
  * will be filled with a value equal to 0.
  * @throw std::out_of_range Throws a std::out_of_range exception if
@@ -94,14 +94,14 @@ int VectorInt::getCapacity() const{
 }
 
 /**
- * @brief Compares the integer vectors of this object and the provided 
- * object, and returns the number of identical elements in both of them. The 
+ * @brief Compares the integer vectors of this object and the provided
+ * object, and returns the number of identical elements in both of them. The
  * comparison is performed in order, element by element, in both vectors.
  * For example, given the following two vectors:
  * 2 1 2 3 5
  * 1 1 2 4 5
  * this method will return 3 (there is a match ​in positions 1, 2 and 4)
- * @throw std::invalid_argument Throws an std::invalid_argument exception 
+ * @throw std::invalid_argument Throws an std::invalid_argument exception
  * if the sizes of this and the provided object are different
  * Query method
  * @param other A VectorInt object. Input parameter
@@ -126,11 +126,11 @@ int VectorInt::countIdenticalElements(const VectorInt &other){
 
 
 /**
- * @brief Obtains a string with information about this VectorInt object, 
+ * @brief Obtains a string with information about this VectorInt object,
  * in the following format:
- * - First line, the number of elements in this vector. 
- * - Second line, the elements in this vector, separated by a whitespace. 
- * Take into account that a '\n' should appear after the last element 
+ * - First line, the number of elements in this vector.
+ * - Second line, the elements in this vector, separated by a whitespace.
+ * Take into account that a '\n' should appear after the last element
  * instead of a whitespace.
  * Query method
  * @return string with information about this VectorInt object
@@ -152,14 +152,14 @@ std::string VectorInt::toString() const{
 
 /**
  * @brief Gets the Euclidean distance between this and the provided object.
- * The Euclidean distance between two points \f$ P=(p_1, p_2, ... , p_n) \f$ 
- * and \f$ Q=(q_1, q_2, ... , q_n) \f$ in an n-dimensional space \f$ R^n \f$ 
- * is the length of the line segment connecting them, calculated as the 
- * square root of the sum of the squared differences of their components: 
+ * The Euclidean distance between two points \f$ P=(p_1, p_2, ... , p_n) \f$
+ * and \f$ Q=(q_1, q_2, ... , q_n) \f$ in an n-dimensional space \f$ R^n \f$
+ * is the length of the line segment connecting them, calculated as the
+ * square root of the sum of the squared differences of their components:
  * \f$ d(P,Q)=\sqrt{ \sum_{i=1}^{n} (p_i-q_i)^{2} } \f$
- * @throw std::invalid_argument Throws an std::invalid_argument exception 
+ * @throw std::invalid_argument Throws an std::invalid_argument exception
  * if the size of this object and the provided one are not equal
- * @throw std::invalid_argument Throws an std::invalid_argument exception 
+ * @throw std::invalid_argument Throws an std::invalid_argument exception
  * if the size of the provided object is zero
  * Query method
  * @param other A VectorInt. Input parameter
@@ -174,7 +174,7 @@ double VectorInt::distance(const VectorInt &other){
     {
         throw std::invalid_argument("VectorInt sizes are different");
     }
-    
+
     double sum = 0.0;
     for (int i = 0; i < other.getSize(); i++)
     {
@@ -196,10 +196,10 @@ void VectorInt::assign(int value){
 }
 
 /**
- * @brief Appends the given integer value at the end (first free position) 
- * of the array of integers in this object. 
+ * @brief Appends the given integer value at the end (first free position)
+ * of the array of integers in this object.
  * If the dynamic array of integers was full (its capacity was full), this
- * method automatically reallocates a new array with a capacity equal to 
+ * method automatically reallocates a new array with a capacity equal to
  * the current capacity plus an extra block of size equal to BLOCK_SIZE.
  * Modifier method
  * @param value the new integer value to be appended. Input parameter
@@ -214,8 +214,8 @@ void VectorInt::append(int value){
 }
 
 /**
- * @brief Removes all the elements in this object, leaving the container 
- * with a size equal to 0. It only need to set the number of elements 
+ * @brief Removes all the elements in this object, leaving the container
+ * with a size equal to 0. It only need to set the number of elements
  * (_size field) to zero.
  * Modifier method
  */
@@ -224,11 +224,11 @@ void VectorInt::clear(){
 }
 
 /**
- * @brief Gets a const reference to the integer element at the given 
+ * @brief Gets a const reference to the integer element at the given
  * position
  * Query method
  * @param pos position in the VectorInt object. Input parameter
- * @throw std::out_of_range Throws an std::out_of_range exception if the 
+ * @throw std::out_of_range Throws an std::out_of_range exception if the
  * given position is not valid.
  * @return A const reference to the integer element at the given position
  */
@@ -241,10 +241,10 @@ const int &VectorInt::at(int pos) const{
 }
 
 /**
- * @brief Gets a reference to the integer element at the given position. 
+ * @brief Gets a reference to the integer element at the given position.
  * Modifier method
  * @param pos position in the VectorInt object. Input parameter
- * @throw std::out_of_range Throws an std::out_of_range exception if the 
+ * @throw std::out_of_range Throws an std::out_of_range exception if the
  * given position is not valid
  * @return A reference to the integer element at the given position.
  */
@@ -285,4 +285,3 @@ void VectorInt::Redimensionar(){
     delete[] _values;
     _values = auxiliar;
 }
-
