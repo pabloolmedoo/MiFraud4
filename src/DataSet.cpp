@@ -8,7 +8,7 @@ using namespace std;
 
 const string DataSet::MAGIC_STRING_T = "MP-FRAUD_DATASET-T-1.0";
 
-void DataSet::allocate(int numInstances, int numLocations)
+void DataSet::allocate( int numInstances, int numLocations)
 {
     if (numInstances < 0 || numLocations < 0)
     {
