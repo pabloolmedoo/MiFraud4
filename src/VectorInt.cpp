@@ -36,7 +36,7 @@ VectorInt::VectorInt(int size){
 
     _size = size;
     _capacity = size;
-    ReservarMemoria();
+    ReservarMemoria(_capacity);
 
     for (int i = 0; i < size; i++)
     {
@@ -50,6 +50,7 @@ VectorInt::VectorInt(int size){
  * parameter
  */
 VectorInt::VectorInt(const VectorInt &orig){
+    ReservarMemoria(orig._capacity);
     Copiar(orig);
 }
 
@@ -70,6 +71,7 @@ VectorInt::~VectorInt(){
 VectorInt &VectorInt::operator=(const VectorInt &orig){
     if(this != &orig){
         LiberarMemoria();
+        ReservarMemoria(orig._capacity);
         Copiar(orig);
     }
     return *this;
@@ -263,14 +265,14 @@ void VectorInt::LiberarMemoria(){
     _capacity = 0;
 }
 
-void VectorInt::ReservarMemoria(){
+void VectorInt::ReservarMemoria(int capacidad){
+    delete[] _values;
+    _capacity = capacidad;
     _values = new int[_capacity];
 }
 
 void VectorInt::Copiar(const VectorInt &otro){
     _size = otro._size;
-    _capacity = otro._capacity;
-    ReservarMemoria();
     for(int i = 0; i < otro._size; i++){
         _values[i] = otro._values[i];
     }

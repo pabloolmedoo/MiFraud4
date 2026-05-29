@@ -1,0 +1,1 @@
+/usr/bin/g++ -Wall -Wextra -Wpedantic -g CMakeFiles/MiFraud3.dir/src/VectorInt.cpp.o CMakeFiles/MiFraud3.dir/src/Clustering.cpp.o CMakeFiles/MiFraud3.dir/src/Location.cpp.o CMakeFiles/MiFraud3.dir/src/VectorLocation.cpp.o CMakeFiles/MiFraud3.dir/src/DataSet.cpp.o CMakeFiles/MiFraud3.dir/src/main.cpp.o -o MiFraud3 

@@ -1,8 +1,15 @@
 /*
  * Metodología de la Programación
  * Curso 2025/2026
- *
- * main.cpp para Fraud3 preparado para los tests de integración adjuntos.
+ */
+
+/**
+ * @file main.cpp
+ * @author Silvia Acid Carrillo <acid@decsai.ugr.es>
+ * @author Andrés Cano Utrera <acu@decsai.ugr.es>
+ * @author Luis Castillo Vidal <L.Castillo@decsai.ugr.es>
+ * 
+ * Created on 24 de octubre de 2025, 9:27
  */
 
 #include <iostream>

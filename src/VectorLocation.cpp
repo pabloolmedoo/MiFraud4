@@ -31,7 +31,7 @@ VectorLocation::VectorLocation(int size){
     }
     _size = size;
     _capacity = size;
-    ReservarMemoria();
+    ReservarMemoria(_capacity);
 }
 
 /**
@@ -40,6 +40,7 @@ VectorLocation::VectorLocation(int size){
  * Input parameter
  */
 VectorLocation::VectorLocation(const VectorLocation &orig){
+    ReservarMemoria(orig._capacity);
     Copiar(orig);
 }
 
@@ -60,6 +61,7 @@ VectorLocation::~VectorLocation(){
 VectorLocation &VectorLocation::operator=(const VectorLocation &orig){
     if(this != &orig){
         LiberarMemoria();
+        ReservarMemoria(orig._capacity);
         Copiar(orig);
     }
     return *this;
@@ -357,14 +359,13 @@ void VectorLocation::LiberarMemoria(){
     _capacity = 0;
 }
 
-void VectorLocation::ReservarMemoria(){
+void VectorLocation::ReservarMemoria(int capacidad){
+    _capacity = capacidad;
     _locations = new Location[_capacity];
 }
 
 void VectorLocation::Copiar(const VectorLocation &otro){
     _size = otro._size;
-    _capacity = otro._capacity;
-    ReservarMemoria();
     for(int i = 0; i < otro._size; i++){
         _locations[i] = otro._locations[i];
     }

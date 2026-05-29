@@ -192,7 +192,7 @@ private:
     //Metodos privados necesarios
     void LiberarMemoria();
 
-    void ReservarMemoria();
+    void ReservarMemoria(int capacidad);
 
     void Copiar(const VectorInt& otro);
 
